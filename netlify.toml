@@ -1,26 +1,41 @@
-# Netlify configuration for Vite React SPA
+# Netlify configuration for Vite React Single Page Application (SPA)
 [build]
   command = "npm run build"
   publish = "dist"
+
+# Strict MIME headers to satisfy WHATWG HTML spec & prevent "application/octet-stream" module errors
+[[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/*.mjs"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Content-Type = "text/css; charset=utf-8"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
 
 # Single Page App (SPA) redirect rule
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# Explicit MIME type headers to prevent "application/octet-stream" strict MIME errors
-[[headers]]
-  for = "/assets/*.js"
-  [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-
-[[headers]]
-  for = "/assets/*.css"
-  [headers.values]
-    Content-Type = "text/css; charset=utf-8"

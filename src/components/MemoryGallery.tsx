@@ -8,7 +8,16 @@ export const MemoryGallery: React.FC = () => {
   const [memories, setMemories] = useState<MemoryPhoto[]>(() => {
     try {
       const saved = localStorage.getItem('yashika_mamm_15_memories');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Merge: use user overrides if available, otherwise ensure bundled imageSrc from ALL_15_MEMORIES
+          return ALL_15_MEMORIES.map((defItem) => {
+            const found = parsed.find((p: MemoryPhoto) => p.id === defItem.id);
+            return found ? { ...defItem, ...found, imageSrc: found.imageSrc || defItem.imageSrc } : defItem;
+          });
+        }
+      }
     } catch {}
     return ALL_15_MEMORIES;
   });
